@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Library_ManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BOOK">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TITLE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AUTHOR" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PUBLISHER" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ISBN" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="GENERE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="B_IMAGE" Type="varchar(max)" Nullable="false" />
+          <Property Name="RACK_NO" Type="int" />
+          <Property Name="E_BOOK" Type="varchar(max)" />
+          <Property Name="LANG" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TOTAL_COPIES" Type="int" Nullable="false" />
+          <Property Name="AVAILABLE_COPIES" Type="int" />
+          <Property Name="YOP" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ISSUES">
+          <Key>
+            <PropertyRef Name="ISSUE_ID" />
+          </Key>
+          <Property Name="ISSUE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="REQUEST_ID" Type="int" />
+          <Property Name="ISSUE_DATE" Type="date" Nullable="false" />
+          <Property Name="RETURN_DATE" Type="date" Nullable="false" />
+          <Property Name="FINE" Type="real" />
+          <Property Name="REISSUED" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="request_id" />
+          </Key>
+          <Property Name="request_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="book_id" Type="int" />
+          <Property Name="request_status" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="reIssue_id" Type="int" />
+          <Property Name="request_date" Type="date" />
+          <Property Name="request_approve_date" Type="date" />
+        </EntityType>
+        <EntityType Name="user_data">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="user_email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="user_gender" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="user_type" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="user_age" Type="int" Nullable="false" />
+          <Property Name="user_DOB" Type="date" Nullable="false" />
+          <Property Name="user_address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="user_contact" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ISSUES__REQUEST___2C3393D0">
+          <End Role="Request" Type="Self.Request" Multiplicity="0..1" />
+          <End Role="ISSUES" Type="Self.ISSUES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="request_id" />
+            </Principal>
+            <Dependent Role="ISSUES">
+              <PropertyRef Name="REQUEST_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Request__book_id__29572725">
+          <End Role="BOOK" Type="Self.BOOK" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOOK">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Request__user_id__286302EC">
+          <End Role="user_data" Type="Self.user_data" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_data">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Library_ManagementModelStoreContainer">
+          <EntitySet Name="BOOK" EntityType="Self.BOOK" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ISSUES" EntityType="Self.ISSUES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Request" EntityType="Self.Request" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_data" EntityType="Self.user_data" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ISSUES__REQUEST___2C3393D0" Association="Self.FK__ISSUES__REQUEST___2C3393D0">
+            <End Role="Request" EntitySet="Request" />
+            <End Role="ISSUES" EntitySet="ISSUES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Request__book_id__29572725" Association="Self.FK__Request__book_id__29572725">
+            <End Role="BOOK" EntitySet="BOOK" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Request__user_id__286302EC" Association="Self.FK__Request__user_id__286302EC">
+            <End Role="user_data" EntitySet="user_data" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Library_ManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BOOK">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TITLE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AUTHOR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PUBLISHER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ISBN" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GENERE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="B_IMAGE" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RACK_NO" Type="Int32" />
+          <Property Name="E_BOOK" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LANG" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TOTAL_COPIES" Type="Int32" Nullable="false" />
+          <Property Name="AVAILABLE_COPIES" Type="Int32" />
+          <Property Name="YOP" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Requests" Relationship="Self.FK__Request__book_id__29572725" FromRole="BOOK" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="ISSUE">
+          <Key>
+            <PropertyRef Name="ISSUE_ID" />
+          </Key>
+          <Property Name="ISSUE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="REQUEST_ID" Type="Int32" />
+          <Property Name="ISSUE_DATE" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RETURN_DATE" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FINE" Type="Single" />
+          <Property Name="REISSUED" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Request" Relationship="Self.FK__ISSUES__REQUEST___2C3393D0" FromRole="ISSUES" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="request_id" />
+          </Key>
+          <Property Name="request_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="book_id" Type="Int32" />
+          <Property Name="request_status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="reIssue_id" Type="Int32" />
+          <Property Name="request_date" Type="DateTime" Precision="0" />
+          <Property Name="request_approve_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="BOOK" Relationship="Self.FK__Request__book_id__29572725" FromRole="Request" ToRole="BOOK" />
+          <NavigationProperty Name="ISSUES" Relationship="Self.FK__ISSUES__REQUEST___2C3393D0" FromRole="Request" ToRole="ISSUES" />
+          <NavigationProperty Name="user_data" Relationship="Self.FK__Request__user_id__286302EC" FromRole="Request" ToRole="user_data" />
+        </EntityType>
+        <EntityType Name="user_data">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_age" Type="Int32" Nullable="false" />
+          <Property Name="user_DOB" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="user_address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_contact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Requests" Relationship="Self.FK__Request__user_id__286302EC" FromRole="user_data" ToRole="Request" />
+        </EntityType>
+        <Association Name="FK__Request__book_id__29572725">
+          <End Role="BOOK" Type="Self.BOOK" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOOK">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ISSUES__REQUEST___2C3393D0">
+          <End Role="Request" Type="Self.Request" Multiplicity="0..1" />
+          <End Role="ISSUES" Type="Self.ISSUE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="request_id" />
+            </Principal>
+            <Dependent Role="ISSUES">
+              <PropertyRef Name="REQUEST_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Request__user_id__286302EC">
+          <End Role="user_data" Type="Self.user_data" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_data">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Library_ManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BOOKs" EntityType="Self.BOOK" />
+          <EntitySet Name="ISSUES" EntityType="Self.ISSUE" />
+          <EntitySet Name="Requests" EntityType="Self.Request" />
+          <EntitySet Name="user_data" EntityType="Self.user_data" />
+          <AssociationSet Name="FK__Request__book_id__29572725" Association="Self.FK__Request__book_id__29572725">
+            <End Role="BOOK" EntitySet="BOOKs" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ISSUES__REQUEST___2C3393D0" Association="Self.FK__ISSUES__REQUEST___2C3393D0">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="ISSUES" EntitySet="ISSUES" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Request__user_id__286302EC" Association="Self.FK__Request__user_id__286302EC">
+            <End Role="user_data" EntitySet="user_data" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Library_ManagementModelStoreContainer" CdmEntityContainer="Library_ManagementEntities">
+          <EntitySetMapping Name="BOOKs">
+            <EntityTypeMapping TypeName="Library_ManagementModel.BOOK">
+              <MappingFragment StoreEntitySet="BOOK">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="AUTHOR" ColumnName="AUTHOR" />
+                <ScalarProperty Name="PUBLISHER" ColumnName="PUBLISHER" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="GENERE" ColumnName="GENERE" />
+                <ScalarProperty Name="B_IMAGE" ColumnName="B_IMAGE" />
+                <ScalarProperty Name="RACK_NO" ColumnName="RACK_NO" />
+                <ScalarProperty Name="E_BOOK" ColumnName="E_BOOK" />
+                <ScalarProperty Name="LANG" ColumnName="LANG" />
+                <ScalarProperty Name="TOTAL_COPIES" ColumnName="TOTAL_COPIES" />
+                <ScalarProperty Name="AVAILABLE_COPIES" ColumnName="AVAILABLE_COPIES" />
+                <ScalarProperty Name="YOP" ColumnName="YOP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ISSUES">
+            <EntityTypeMapping TypeName="Library_ManagementModel.ISSUE">
+              <MappingFragment StoreEntitySet="ISSUES">
+                <ScalarProperty Name="ISSUE_ID" ColumnName="ISSUE_ID" />
+                <ScalarProperty Name="REQUEST_ID" ColumnName="REQUEST_ID" />
+                <ScalarProperty Name="ISSUE_DATE" ColumnName="ISSUE_DATE" />
+                <ScalarProperty Name="RETURN_DATE" ColumnName="RETURN_DATE" />
+                <ScalarProperty Name="FINE" ColumnName="FINE" />
+                <ScalarProperty Name="REISSUED" ColumnName="REISSUED" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requests">
+            <EntityTypeMapping TypeName="Library_ManagementModel.Request">
+              <MappingFragment StoreEntitySet="Request">
+                <ScalarProperty Name="request_id" ColumnName="request_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
+                <ScalarProperty Name="request_status" ColumnName="request_status" />
+                <ScalarProperty Name="reIssue_id" ColumnName="reIssue_id" />
+                <ScalarProperty Name="request_date" ColumnName="request_date" />
+                <ScalarProperty Name="request_approve_date" ColumnName="request_approve_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_data">
+            <EntityTypeMapping TypeName="Library_ManagementModel.user_data">
+              <MappingFragment StoreEntitySet="user_data">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="user_email" ColumnName="user_email" />
+                <ScalarProperty Name="user_password" ColumnName="user_password" />
+                <ScalarProperty Name="user_gender" ColumnName="user_gender" />
+                <ScalarProperty Name="user_type" ColumnName="user_type" />
+                <ScalarProperty Name="user_age" ColumnName="user_age" />
+                <ScalarProperty Name="user_DOB" ColumnName="user_DOB" />
+                <ScalarProperty Name="user_address" ColumnName="user_address" />
+                <ScalarProperty Name="user_contact" ColumnName="user_contact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
