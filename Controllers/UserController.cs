@@ -10,26 +10,19 @@ namespace LibraryManagement.Controllers
 {
     public class UserController : ApiController
     {
+        DAL d = new DAL();
 
         [Route("api/Users")]
         [HttpGet]
         public HttpResponseMessage getAllUsers()
-        {
-            Library_ManagementEntities entities = new Library_ManagementEntities();
-            List<UserModel> list = new List<UserModel>();
-            foreach(user_data user in entities.user_data)
-            {
-                UserModel um = new UserModel(user.user_id, user.user_name, user.user_email, user.user_password, user.user_gender, user.user_type, user.user_age, user.user_DOB, user.user_address, user.user_contact);
-                list.Add(um);
-                
-            }
-            if (list.Count == 0)
+        {           
+            if (d.getAllUsers().Count == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Record Doesnot exist.");
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.OK, list);
+                return Request.CreateResponse(HttpStatusCode.OK, d.getAllUsers());
             }
         }
 
@@ -117,8 +110,6 @@ namespace LibraryManagement.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        entities.user_data.Add(user);
-                        entities.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, um);
                     }
                     else

@@ -10,25 +10,20 @@ namespace LibraryManagement.Controllers
 {
     public class BookController : ApiController
     {
+        DAL d = new DAL();
+
        [Route("api/AllBooks")]
        [HttpGet]
        public HttpResponseMessage getAllBooks()
         {
-            Library_ManagementEntities entities = new Library_ManagementEntities();
-            List<BookModel> list = new List<BookModel>();
-            foreach (BOOK book in entities.BOOKs)
-            {
-                BookModel bm = new BookModel(book.ID, book.TITLE, book.AUTHOR, book.PUBLISHER, book.ISBN, book.GENERE, book.B_IMAGE, book.RACK_NO, book.E_BOOK, book.LANG, book.TOTAL_COPIES, book.AVAILABLE_COPIES, book.YOP);
-                list.Add(bm);
-
-            }
-            if (list.Count == 0)
+           
+            if (d.getAllBooks().Count == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Record Doesnot exist.");
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.OK, list);
+                return Request.CreateResponse(HttpStatusCode.OK, d.getAllBooks());
             }
         }
 
