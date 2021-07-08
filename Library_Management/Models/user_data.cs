@@ -11,7 +11,8 @@ namespace Library_Management.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class user_data
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,18 +20,29 @@ namespace Library_Management.Models
         {
             this.Requests = new HashSet<Request>();
         }
-    
+
         public int user_id { get; set; }
+        [Required]
         public string user_name { get; set; }
+        [Required]
+        [EmailAddress]
         public string user_email { get; set; }
+        [Required]
+        [MinLength(7)]
         public string user_password { get; set; }
+        [Required]
         public string user_gender { get; set; }
+        [Required]
         public string user_type { get; set; }
+        [Required]
         public int user_age { get; set; }
+        [Required]
         public System.DateTime user_DOB { get; set; }
+        [Required]
         public string user_address { get; set; }
+        [Required]
         public string user_contact { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
     }
