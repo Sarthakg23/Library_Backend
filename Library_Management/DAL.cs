@@ -1,7 +1,11 @@
 ﻿using Library_Management.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Web;
 
 namespace Library_Management
@@ -290,6 +294,59 @@ namespace Library_Management
                 }
             }
         }
-            
+
+        public bool ValidateCurrentToken(string token)
+        {
+            var mySecret = "Library Management Sarthak Goyal";
+            var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
+
+            var myIssuer = "https://localhost:44335/";
+            var myAudience = "https://localhost:44335/";
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    IssuerSigningKey = mySecurityKey
+                }, out SecurityToken validatedToken);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public string CreateJWT(user_data user)
+        {
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                .GetBytes("Library Management Sarthak Goyal"));
+
+            var claims = new Claim[] {
+                new Claim(ClaimTypes.Role,user.user_type),
+                new Claim(ClaimTypes.SerialNumber,user.user_id.ToString())
+            };
+
+            var signingCredentials = new SigningCredentials(
+                    key, SecurityAlgorithms.HmacSha256Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(10),
+                SigningCredentials = signingCredentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
     }
     }

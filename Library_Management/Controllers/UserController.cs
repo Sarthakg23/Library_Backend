@@ -14,6 +14,10 @@ namespace Library_Management.Controllers
 {
     public class UserController : ApiController
     {
+
+        DAL d = new DAL();
+
+
         [Route("api/User/SignIn")]
         [HttpPost]
         public HttpResponseMessage signIn(LoginInput user)
@@ -28,8 +32,7 @@ namespace Library_Management.Controllers
                         UserModel um = new UserModel(user_obj.user_id, user_obj.user_name, user_obj.user_email, user_obj.user_password, user_obj.user_gender, user_obj.user_type, user_obj.user_age, user_obj.user_DOB, user_obj.user_address, user_obj.user_contact);
                        try
                         {
-                            LoginResponse lr = new LoginResponse(um, CreateJWT(user_obj));
-                            return Request.CreateResponse(HttpStatusCode.OK, lr);
+                            return Request.CreateResponse(HttpStatusCode.OK, d.CreateJWT(user_obj));
 
                         }
                         catch (Exception e)
@@ -50,30 +53,5 @@ namespace Library_Management.Controllers
             }
         }
 
-
-        private string CreateJWT(user_data user)
-        {
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes("Library Management Sarthak Goyal"));
-
-            var claims = new Claim[] {
-                new Claim(ClaimTypes.Name,user.user_name),
-                new Claim(ClaimTypes.NameIdentifier,user.user_id.ToString())
-            };
-
-            var signingCredentials = new SigningCredentials(
-                    key, SecurityAlgorithms.HmacSha256Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(1),
-                SigningCredentials = signingCredentials
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
     }
 }
