@@ -25,6 +25,19 @@ namespace project2.Models
         public System.DateTime RETURN_DATE { get; set; }
         public Nullable<float> FINE { get; set; }
         public int REISSUED { get; set; }
+
+        public ISSUE() { } 
+        public ISSUE(int request_id,DateTime IssueDate,DateTime returnDate,float fine,int reissued)
+        {
+            REQUEST_ID = request_id;
+            ISSUE_DATE = IssueDate;
+            RETURN_DATE = returnDate;
+            FINE = fine;
+            REISSUED = reissued;
+
+
+        }
+        
     
         public virtual Request Request { get; set; }
     }

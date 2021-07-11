@@ -25,16 +25,32 @@ namespace project2.Models
 
         [Required]
         public string TITLE { get; set; }
+        [Required]
+
         public string AUTHOR { get; set; }
+        [Required]
+
         public string PUBLISHER { get; set; }
+        [Required]
+
         public string ISBN { get; set; }
+        [Required]
+
         public string GENERE { get; set; }
+        [Required]
+
         public string B_IMAGE { get; set; }
+       
+
         public Nullable<int> RACK_NO { get; set; }
         public string E_BOOK { get; set; }
+        [Required]
+
         public string LANG { get; set; }
         public int TOTAL_COPIES { get; set; }
         public Nullable<int> AVAILABLE_COPIES { get; set; }
+        [Required]
+
         public System.DateTime YOP { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

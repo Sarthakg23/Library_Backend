@@ -93,10 +93,26 @@ namespace project2.Controllers
             }
             IssueModel issueModel = new IssueModel(issuedata.ISSUE_ID, issuedata.REQUEST_ID, issuedata.ISSUE_DATE, issuedata.RETURN_DATE, issuedata.FINE, issuedata.REISSUED);
 
-           
-
-
             return Ok(issueModel);
+        }
+
+        [HttpGet]
+        [Route("api/issueByUserId/{id}")]
+        public IHttpActionResult issuebyuserid(int id)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            List<ISSUE> li = new List<ISSUE>();
+            li = lb.ISSUES.ToList();
+            List<IssueModel> issuelist = new List<IssueModel>();
+            foreach(var k in li)
+            {
+                if (k.Request.user_id == id)
+                {
+                    IssueModel ism = new IssueModel(k.ISSUE_ID, k.REQUEST_ID, k.ISSUE_DATE, k.RETURN_DATE, k.FINE, k.REISSUED);
+                    issuelist.Add(ism);
+                }
+            }
+            return Ok(issuelist);
         }
 
 

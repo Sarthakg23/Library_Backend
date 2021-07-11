@@ -11,6 +11,7 @@ namespace project2.Controllers
 {
     public class RequestController : ApiController
     {
+        dall d = new dall();
         [HttpGet]
         [Route("api/allRequests")]
 
@@ -22,10 +23,11 @@ namespace project2.Controllers
             requestlist = lb.Requests.ToList();
             if (requestlist.Count == 0) return Content(HttpStatusCode.NotFound, "NOt have any requests");
 
-            List<requestModel> requestModelslist = new List<requestModel>();
+            List<issueApproveModel> requestModelslist = new List<issueApproveModel>();
             foreach(var k in requestlist)
             {
-                requestModel rm = new requestModel(k.request_id, k.user_id, k.book_id, k.request_status, k.reIssue_id, k.request_date, k.request_approve_date);
+                BOOK bk = lb.BOOKs.FirstOrDefault(obj => obj.ID == k.book_id);
+                issueApproveModel rm = new issueApproveModel(k.request_id, k.user_id, k.book_id, k.request_status, k.reIssue_id, k.request_date, k.request_approve_date,bk.AVAILABLE_COPIES);
                 requestModelslist.Add(rm);
             }
             if(requestModelslist.Count==0) return Content(HttpStatusCode.NotFound, "NOt have any requests");
@@ -63,33 +65,13 @@ namespace project2.Controllers
 
         [HttpPut]
         [Route("api/approveRequest/{id}")]
-        public IHttpActionResult ApproveRequest(int id)
+        public HttpResponseMessage ApproveRequest(int id)
         {
-            Library_ManagementEntities lb = new Library_ManagementEntities();
-            Request request = lb.Requests.FirstOrDefault(ids => ids.request_id == id);
-            if (request == null)
-            {
-                return Content(HttpStatusCode.BadRequest, "No request found with this request id");
-            }
+            if (d.approveRequest(id) == false)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Invalid Request Id!");
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, "Request Approved");
 
-            try
-            {
-                request.request_status = "approved";
-                request.request_approve_date = DateTime.Now;
-                ISSUE issue = new ISSUE();
-                issue.RETURN_DATE = DateTime.Now.AddDays(10);
-                request.reIssue_id = issue.ISSUE_ID;
-                lb.SaveChanges();
-
-                requestModel requestmodel = new requestModel(request.request_id, request.user_id, request.book_id, request.request_status, request.reIssue_id, request.request_date, request.request_approve_date);
-
-                return Ok(requestmodel);
-            }
-            catch(Exception ex)
-            {
-                return Content(HttpStatusCode.BadRequest, ex);
-            }
-            
         }
 
         [HttpPut]
@@ -119,6 +101,64 @@ namespace project2.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("api/isRequested")]
+        public HttpResponseMessage isrequestedOrNot(isRequestModel data)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            if (ModelState.IsValid)
+            {
+                Request request = lb.Requests.FirstOrDefault(d => d.book_id == data.book_id && d.user_id == data.user_id);
+                if (request == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "new request");
+
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "allready requested");
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "some is wrong please try again");
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("api/isapproved")]
+        public HttpResponseMessage isapproved(isRequestModel data)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            if (ModelState.IsValid)
+            {
+                Request request = lb.Requests.FirstOrDefault(d => d.book_id == data.book_id && d.user_id == data.user_id);
+                if (request == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Not");
+
+                }
+                else
+                {
+                    if (request.request_status == "approved")
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, "yes");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, "Not");
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "some is wrong please try again");
+            }
+
+
+        }
+
+
 
     }
 }
