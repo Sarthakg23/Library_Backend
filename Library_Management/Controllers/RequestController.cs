@@ -63,5 +63,66 @@ namespace Library_Management.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Request Not Generated!");
         }
 
+        [HttpPost]
+        [Route("api/isRequested")]
+        public HttpResponseMessage isrequestedOrNot(isRequestedModel data)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            if (ModelState.IsValid)
+            {
+                Request request = lb.Requests.FirstOrDefault(d => d.book_id == data.book_id && d.user_id == data.user_id);
+                if (request == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "new request");
+
+                }
+                else if(request.request_status=="Cancelled")
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "new request");
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "allready requested");
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "some is wrong please try again");
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("api/isapproved")]
+        public HttpResponseMessage isapproved(isRequestedModel data)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            if (ModelState.IsValid)
+            {
+                Request request = lb.Requests.FirstOrDefault(d => d.book_id == data.book_id && d.user_id == data.user_id);
+                if (request == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Not");
+
+                }
+                else
+                {
+                    if (request.request_status == "approved")
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, "yes");
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, "Not");
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "some is wrong please try again");
+            }
+
+
+        }
+
+
     }
 }

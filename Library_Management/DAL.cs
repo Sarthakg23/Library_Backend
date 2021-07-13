@@ -259,7 +259,7 @@ namespace Library_Management
                         {
                            double days = (DateTime.Now - i.RETURN_DATE).TotalDays;
                            double fine = 5 * days;
-                            i.FINE = (float?)(i.FINE + fine);
+                            i.FINE = (float?)fine;
                             IssueModel issue=new IssueModel(i.ISSUE_ID, i.REQUEST_ID, i.ISSUE_DATE, i.RETURN_DATE, i.FINE, i.REISSUED);
                             list.Add(issue);
                         }
