@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Library_ManagementModelStoreContainer" CdmEntityContainer="Library_ManagementEntities">
+    <EntitySetMapping Name="BOOKs">
+      <EntityTypeMapping TypeName="Library_ManagementModel.BOOK">
+        <MappingFragment StoreEntitySet="BOOK">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+          <ScalarProperty Name="AUTHOR" ColumnName="AUTHOR" />
+          <ScalarProperty Name="PUBLISHER" ColumnName="PUBLISHER" />
+          <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+          <ScalarProperty Name="GENERE" ColumnName="GENERE" />
+          <ScalarProperty Name="B_IMAGE" ColumnName="B_IMAGE" />
+          <ScalarProperty Name="RACK_NO" ColumnName="RACK_NO" />
+          <ScalarProperty Name="E_BOOK" ColumnName="E_BOOK" />
+          <ScalarProperty Name="LANG" ColumnName="LANG" />
+          <ScalarProperty Name="TOTAL_COPIES" ColumnName="TOTAL_COPIES" />
+          <ScalarProperty Name="AVAILABLE_COPIES" ColumnName="AVAILABLE_COPIES" />
+          <ScalarProperty Name="YOP" ColumnName="YOP" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ISSUES">
+      <EntityTypeMapping TypeName="Library_ManagementModel.ISSUE">
+        <MappingFragment StoreEntitySet="ISSUES">
+          <ScalarProperty Name="ISSUE_ID" ColumnName="ISSUE_ID" />
+          <ScalarProperty Name="REQUEST_ID" ColumnName="REQUEST_ID" />
+          <ScalarProperty Name="ISSUE_DATE" ColumnName="ISSUE_DATE" />
+          <ScalarProperty Name="RETURN_DATE" ColumnName="RETURN_DATE" />
+          <ScalarProperty Name="FINE" ColumnName="FINE" />
+          <ScalarProperty Name="REISSUED" ColumnName="REISSUED" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Requests">
+      <EntityTypeMapping TypeName="Library_ManagementModel.Request">
+        <MappingFragment StoreEntitySet="Request">
+          <ScalarProperty Name="request_id" ColumnName="request_id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="book_id" ColumnName="book_id" />
+          <ScalarProperty Name="request_status" ColumnName="request_status" />
+          <ScalarProperty Name="reIssue_id" ColumnName="reIssue_id" />
+          <ScalarProperty Name="request_date" ColumnName="request_date" />
+          <ScalarProperty Name="request_approve_date" ColumnName="request_approve_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="user_data">
+      <EntityTypeMapping TypeName="Library_ManagementModel.user_data">
+        <MappingFragment StoreEntitySet="user_data">
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="user_name" ColumnName="user_name" />
+          <ScalarProperty Name="user_email" ColumnName="user_email" />
+          <ScalarProperty Name="user_password" ColumnName="user_password" />
+          <ScalarProperty Name="user_gender" ColumnName="user_gender" />
+          <ScalarProperty Name="user_type" ColumnName="user_type" />
+          <ScalarProperty Name="user_age" ColumnName="user_age" />
+          <ScalarProperty Name="user_DOB" ColumnName="user_DOB" />
+          <ScalarProperty Name="user_address" ColumnName="user_address" />
+          <ScalarProperty Name="user_contact" ColumnName="user_contact" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
