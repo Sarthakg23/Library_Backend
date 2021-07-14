@@ -96,7 +96,7 @@ namespace project2.Controllers
             return Ok(issueModel);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/issueByUserId/{id}")]
         public IHttpActionResult issuebyuserid(int id)
         {
@@ -114,6 +114,22 @@ namespace project2.Controllers
             }
             return Ok(issuelist);
         }
+
+        [HttpDelete]
+        [Route("api/returnBook/{id}")]
+        public IHttpActionResult returnBook(int id)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            ISSUE issue = lb.ISSUES.FirstOrDefault(Id => Id.ISSUE_ID == id);
+            if (issue == null) return Content(HttpStatusCode.NotFound, "Issue not found with this id");
+            lb.ISSUES.Remove(issue);
+            lb.SaveChanges();
+            return Content(HttpStatusCode.OK, "Book is returned");
+        }
+
+       
+
+
 
 
 

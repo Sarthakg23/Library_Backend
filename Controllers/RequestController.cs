@@ -135,7 +135,7 @@ namespace project2.Controllers
             Library_ManagementEntities lb = new Library_ManagementEntities();
             if (ModelState.IsValid)
             {
-                Request request = lb.Requests.FirstOrDefault(d => d.book_id == data.book_id && d.user_id == data.user_id);
+                Request request = lb.Requests.FirstOrDefault(d => d.book_id == data.book_id && d.user_id == data.user_id && d.request_status=="pending");
                 if (request == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, "Not");
@@ -157,6 +157,42 @@ namespace project2.Controllers
 
 
         }
+
+        [HttpPost]
+        [Route("api/requestByUserId/{id}")]
+        public IHttpActionResult requestByUserId(int id)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            List<Request> rqlist = lb.Requests.ToList();
+            if (rqlist.Count==0)
+            {
+                return Content(HttpStatusCode.NotFound, "No request found");
+            }
+            List<issueApproveModel> requestModelslist = new List<issueApproveModel>();
+            foreach (var k in rqlist)
+            {
+                BOOK bk = lb.BOOKs.FirstOrDefault(obj => obj.ID == k.book_id);
+                issueApproveModel rm = new issueApproveModel(k.request_id, k.user_id, k.book_id, k.request_status, k.reIssue_id, k.request_date, k.request_approve_date, bk.AVAILABLE_COPIES);
+                requestModelslist.Add(rm);
+            }
+            if (requestModelslist.Count == 0) return Content(HttpStatusCode.NotFound, "NOt have any requests");
+            return Ok(requestModelslist);
+        }
+
+
+        [HttpDelete]
+        [Route("api/deletebyuser/{id}")]
+        public IHttpActionResult deletebyuser(int id)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            Request rq = lb.Requests.FirstOrDefault(Id => Id.request_id == id);
+            if (rq == null) return Content(HttpStatusCode.NotFound,"request is not found");
+            lb.Requests.Remove(rq);
+            lb.SaveChanges();
+            return Content(HttpStatusCode.OK, "Cancel is successfull");
+
+        }
+
 
 
 
