@@ -348,5 +348,35 @@ namespace Library_Management
             return tokenHandler.WriteToken(token);
         }
 
+
+        public string getEmailFromIssueId(int issueid)
+        {
+            Library_ManagementEntities lb = new Library_ManagementEntities();
+            try
+            {
+                ISSUE issue = lb.ISSUES.FirstOrDefault(id => id.ISSUE_ID == issueid);
+                if (issue == null)
+                {
+                    return "invalid Data";
+                }
+                Request rq = lb.Requests.FirstOrDefault(id => id.request_id == issue.REQUEST_ID);
+                if (rq == null)
+                {
+                    return "invalid Data";
+                }
+                user_data usd = lb.user_data.FirstOrDefault(id => id.user_id == rq.user_id);
+                if (usd == null)
+                {
+                    return "invalid Data";
+                }
+                return usd.user_email;
+            }
+            catch
+            {
+                return "invalid Data";
+
+            }
+        }
+
     }
     }

@@ -16,6 +16,7 @@ namespace Library_Management.Controllers
 
         
         [HttpGet]
+        [Route("api/allissues")]
         public HttpResponseMessage getAllIssues()
         {
             if (Request.Headers.Authorization == null)
@@ -62,6 +63,19 @@ namespace Library_Management.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, "No issue is over due!");
             else
                 return Request.CreateResponse(HttpStatusCode.OK, d.calculateFine());
+        }
+
+        [HttpGet]
+        [Route("api/issue/userEmail/{id}")]
+        public IHttpActionResult GetUserEmail(int id)
+        {
+            DAL dal = new DAL();
+            string user_email=dal.getEmailFromIssueId(id);
+            if(user_email== "invalid Data")
+            {
+                return Content(HttpStatusCode.BadRequest, "invalid Data");
+            }
+            return Content(HttpStatusCode.OK, user_email);
         }
     }
 }
