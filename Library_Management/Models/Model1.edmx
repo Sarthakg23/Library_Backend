@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Library_ManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Library_ManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BOOK">
           <Key>
             <PropertyRef Name="ID" />
@@ -61,7 +61,7 @@
           <Property Name="user_address" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="user_contact" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <Association Name="FK__ISSUES__REQUEST___32E0915F">
+        <Association Name="FK__ISSUES__REQUEST___2C3393D0">
           <End Role="Request" Type="Self.Request" Multiplicity="0..1" />
           <End Role="ISSUES" Type="Self.ISSUES" Multiplicity="*" />
           <ReferentialConstraint>
@@ -73,7 +73,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Request__book_id__2D27B809">
+        <Association Name="FK__Request__book_id__29572725">
           <End Role="BOOK" Type="Self.BOOK" Multiplicity="0..1" />
           <End Role="Request" Type="Self.Request" Multiplicity="*" />
           <ReferentialConstraint>
@@ -85,7 +85,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Request__user_id__2C3393D0">
+        <Association Name="FK__Request__user_id__286302EC">
           <End Role="user_data" Type="Self.user_data" Multiplicity="0..1" />
           <End Role="Request" Type="Self.Request" Multiplicity="*" />
           <ReferentialConstraint>
@@ -102,21 +102,20 @@
           <EntitySet Name="ISSUES" EntityType="Self.ISSUES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Request" EntityType="Self.Request" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_data" EntityType="Self.user_data" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__ISSUES__REQUEST___32E0915F" Association="Self.FK__ISSUES__REQUEST___32E0915F">
+          <AssociationSet Name="FK__ISSUES__REQUEST___2C3393D0" Association="Self.FK__ISSUES__REQUEST___2C3393D0">
             <End Role="Request" EntitySet="Request" />
             <End Role="ISSUES" EntitySet="ISSUES" />
           </AssociationSet>
-          <AssociationSet Name="FK__Request__book_id__2D27B809" Association="Self.FK__Request__book_id__2D27B809">
+          <AssociationSet Name="FK__Request__book_id__29572725" Association="Self.FK__Request__book_id__29572725">
             <End Role="BOOK" EntitySet="BOOK" />
             <End Role="Request" EntitySet="Request" />
           </AssociationSet>
-          <AssociationSet Name="FK__Request__user_id__2C3393D0" Association="Self.FK__Request__user_id__2C3393D0">
+          <AssociationSet Name="FK__Request__user_id__286302EC" Association="Self.FK__Request__user_id__286302EC">
             <End Role="user_data" EntitySet="user_data" />
             <End Role="Request" EntitySet="Request" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Library_ManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">

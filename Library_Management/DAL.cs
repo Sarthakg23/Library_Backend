@@ -1,4 +1,5 @@
 ﻿using Library_Management.Models;
+using LibraryManagement.Models;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -346,6 +347,17 @@ namespace Library_Management
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+        public List<UserModel> getAllUsers()
+        {
+            Library_ManagementEntities entities = new Library_ManagementEntities();
+            List<UserModel> list = new List<UserModel>();
+            foreach (user_data user in entities.user_data)
+            {
+                UserModel um = new UserModel(user.user_id, user.user_name, user.user_email, user.user_password, user.user_gender, user.user_type, user.user_age, user.user_DOB, user.user_address, user.user_contact);
+                list.Add(um);
+            }
+            return list;
         }
 
     }

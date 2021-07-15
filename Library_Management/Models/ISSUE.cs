@@ -31,8 +31,6 @@ namespace Library_Management.Models
             FINE = fINE;
             REISSUED = rEISSUED;
         }
-
-        public ISSUE()
-        { }
     }
+    
 }

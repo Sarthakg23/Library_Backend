@@ -17,7 +17,7 @@ namespace Library_Management.Controllers
 
         DAL d = new DAL();
 
-
+        
         [HttpGet]
         public HttpResponseMessage getUser(int id)
         {
@@ -34,6 +34,19 @@ namespace Library_Management.Controllers
             }
         }
 
+        [Route("api/Users")]
+        [HttpGet]
+        public HttpResponseMessage getAllUsers()
+        {
+            if (d.getAllUsers().Count == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Record Doesnot exist.");
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, d.getAllUsers());
+            }
+        }
 
         [Route("api/User/SignIn")]
         [HttpPost]
@@ -74,34 +87,34 @@ namespace Library_Management.Controllers
         [HttpPost]
         public HttpResponseMessage signUp(user_data user)
         {
-            Library_ManagementEntities entities = new Library_ManagementEntities();
-            user_data user_obj = entities.user_data.FirstOrDefault(user1 => user1.user_email == user.user_email);
-            if (user_obj == null)
-            {
 
-                try
+            if (ModelState.IsValid)
+            {
+                Library_ManagementEntities entities = new Library_ManagementEntities();
+                user_data user_obj = entities.user_data.FirstOrDefault(user1 => user1.user_email == user.user_email);
+                if (user_obj == null)
                 {
 
-                    if (ModelState.IsValid)
+                    try
                     {
                         entities.user_data.Add(user);
                         entities.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, "Record added successfully. Your user ID is " + user.user_id);
                     }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
-                    }
 
+                    catch (Exception e)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
+                    return Request.CreateResponse(HttpStatusCode.Found, "Record already exist.");
                 }
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.Found, "Record already exist.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
             }
         }
 
@@ -109,65 +122,65 @@ namespace Library_Management.Controllers
         [HttpPost]
         public HttpResponseMessage getUserByMail(UserEmail user_email)
         {
-            Library_ManagementEntities entities = new Library_ManagementEntities();
-            user_data user = entities.user_data.FirstOrDefault(user2 => user2.user_email == user_email.user_email);
-            if (user == null)
+            if (ModelState.IsValid)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "This user doesnot exist");
+                Library_ManagementEntities entities = new Library_ManagementEntities();
+                user_data user = entities.user_data.FirstOrDefault(user2 => user2.user_email == user_email.user_email);
+                UserModel um = new UserModel(user.user_id, user.user_name, user.user_email, user.user_password, user.user_gender, user.user_type, user.user_age, user.user_DOB, user.user_address, user.user_contact);
+                if (user == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "This user doesnot exist");
+                }
+                else
+                {
+                    try
+                    {
+
+                        return Request.CreateResponse(HttpStatusCode.OK, um);
+                    }
+                    catch (Exception e)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
+                    }
+                }
             }
             else
             {
-                try
-                {
-                    if (ModelState.IsValid)
-                    {
-                        UserModel um = new UserModel(user.user_id, user.user_name, user.user_email, user.user_password, user.user_gender, user.user_type, user.user_age, user.user_DOB, user.user_address, user.user_contact);
-                        return Request.CreateResponse(HttpStatusCode.OK, um);
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
-
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
             }
+
         }
 
         [Route("api/User/ForgotPassword")]
         [HttpPut]
         public HttpResponseMessage forgotPassword(ForgotPasswordDataModel user)
         {
-            Library_ManagementEntities entities = new Library_ManagementEntities();
-            user_data user_obj = entities.user_data.FirstOrDefault(user1 => user1.user_email == user.user_email && user1.user_DOB == user.user_DOB);
-
-            if (user_obj != null)
+            if (ModelState.IsValid)
             {
-                try
+                Library_ManagementEntities entities = new Library_ManagementEntities();
+                user_data user_obj = entities.user_data.FirstOrDefault(user1 => user1.user_email == user.user_email && user1.user_DOB == user.user_DOB);
+
+                if (user_obj != null)
                 {
-                    if (ModelState.IsValid)
+                    try
                     {
                         user_obj.user_password = user.user_password;
                         entities.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, "Password has been changed. Use this password to login");
                     }
-                    else
+                    catch (Exception e)
                     {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
                     }
-
                 }
-                catch (Exception e)
+                else
                 {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "This user does not exist");
                 }
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "This user does not exist");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
             }
         }
 
@@ -175,34 +188,32 @@ namespace Library_Management.Controllers
         [HttpPut]
         public HttpResponseMessage updatePassword(UserDataModel user)
         {
-            Library_ManagementEntities entities = new Library_ManagementEntities();
-            user_data user_obj = entities.user_data.FirstOrDefault(user1 => user1.user_id == user.user_id);
-            if (user_obj != null)
+            if (ModelState.IsValid)
             {
-
-                try
+                Library_ManagementEntities entities = new Library_ManagementEntities();
+                user_data user_obj = entities.user_data.FirstOrDefault(user1 => user1.user_id == user.user_id);
+                if (user_obj != null)
                 {
-                    if (ModelState.IsValid)
+                    try
                     {
                         user_obj.user_password = user.user_password;
                         entities.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, "Password has been updated.");
                     }
-                    else
+                    catch (Exception e)
                     {
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
                     }
-
-
                 }
-                catch (Exception e)
+                else
                 {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Invalid data");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "This user does not exist");
                 }
             }
+
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "This user does not exist");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid details.");
             }
         }
     }
